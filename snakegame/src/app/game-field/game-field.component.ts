@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Snake } from "../../domain/snake";
 
 @Component({
@@ -12,10 +12,13 @@ export class GameFieldComponent implements OnInit {
   fieldWidth: number = 500;
   bgColor: string = "lightgray";
   snake: Snake;
+
+ 
   constructor() { }
+ @ViewChild("field") field;
 
   ngOnInit() {
-
+    this.context = this.field.nativeElement.getContext("2d");
   }
 
 }
