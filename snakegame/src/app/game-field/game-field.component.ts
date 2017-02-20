@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewChild, AfterViewInit, HostListener } from '@angular/core';
 import { Snake, Direction } from "../../domain/snake";
+import { FoodGenerator } from "../../domain/foodGenerator";
 
 @Component({
   selector: 'app-game-field',
@@ -8,10 +9,12 @@ import { Snake, Direction } from "../../domain/snake";
 })
 export class GameFieldComponent implements AfterViewInit {
   context:CanvasRenderingContext2D;
+  squareSize: number = 10;
   fieldHeight: number = 600;
   fieldWidth: number = 600;
   bgColor: string = "lightgray";
-  snake: Snake = new Snake(15,15,4);
+  snake: Snake = new Snake(15,15,4,this.squareSize);
+  foodGenerator: FoodGenerator = new FoodGenerator(this.squareSize);
   @ViewChild("field") field;
   @HostListener('window:keydown', ['$event']) onkeypress(event: any) {
     if(event.code === 'ArrowUp' && (this.snake.direction !== Direction.Down)) this.snake.direction = Direction.Up;
@@ -26,6 +29,11 @@ export class GameFieldComponent implements AfterViewInit {
   ngAfterViewInit() {
     this.context = this.field.nativeElement.getContext("2d");
 
+    this.startGame();
+  }
+
+  startGame() {
+    this.foodGenerator.generateFood();
     this.tick();
   }
 
@@ -33,7 +41,11 @@ export class GameFieldComponent implements AfterViewInit {
     requestAnimationFrame(()=> {
       this.tick()
     });
+
     var ctx = this.context;
+    ctx.clearRect(0, 0, 600, 600);
+    this.foodGenerator.drawFood(ctx);
     this.snake.drawSnake(ctx);
+    this.snake.setNewPosition();
   }
 }

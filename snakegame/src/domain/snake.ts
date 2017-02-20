@@ -1,7 +1,6 @@
 import { Field } from "./field";
 
 export class Snake {
-    squaresize: number = 10;
     speedCounter: number = 1;
     fields: Field[];
     direction: Direction = Direction.Up;
@@ -11,16 +10,14 @@ export class Snake {
     get head(): Field {
         return this.fields[0];
     }
-    constructor(fieldDimensionX: number,fieldDimensionY: number, public speed: number) {
-        this.fields = [new Field(300,300), new Field(300+this.squaresize,300),new Field(300+this.squaresize*2,300)];
+    constructor(fieldDimensionX: number,fieldDimensionY: number, public speed: number, public squareSize: number) {
+        this.fields = [new Field(300,300), new Field(300+this.squareSize,300),new Field(300+this.squareSize*2,300)];
     }
 
     drawSnake(ctx:CanvasRenderingContext2D) {
-        ctx.clearRect(0, 0, 600, 600);
         for (let i = 0; i<this.length;i++){
-        ctx.fillRect(this.fields[i].x, this.fields[i].y, this.squaresize, this.squaresize);
+        ctx.fillRect(this.fields[i].x, this.fields[i].y, this.squareSize, this.squareSize);
         }
-        this.setNewPosition();
     }
 
     setNewPosition() {
@@ -30,7 +27,7 @@ export class Snake {
                 this.fields[i].y = this.fields[i-1].y;
                 this.fields[i].x = this.fields[i-1].x;
             }
-            this.head.y = this.head.y-this.squaresize;
+            this.head.y = this.head.y-this.squareSize;
             console.log(this.fields);
         }
         else if(this.direction === Direction.Down) {
@@ -38,21 +35,21 @@ export class Snake {
                 this.fields[i].y = this.fields[i-1].y;
                 this.fields[i].x = this.fields[i-1].x;
             }
-            this.head.y = this.head.y+this.squaresize
+            this.head.y = this.head.y+this.squareSize
         }
         else if(this.direction === Direction.Right) {
             for (let i = this.length-1; i>0;i--) {
                 this.fields[i].y = this.fields[i-1].y;
                 this.fields[i].x = this.fields[i-1].x;
             }
-            this.head.x = this.head.x+this.squaresize;
+            this.head.x = this.head.x+this.squareSize;
         }
         else if(this.direction === Direction.Left) {
             for (let i = this.length-1; i>0;i--) {
                 this.fields[i].y = this.fields[i-1].y;
                 this.fields[i].x = this.fields[i-1].x;
             }
-            this.head.x = this.head.x-this.squaresize;
+            this.head.x = this.head.x-this.squareSize;
         }
     }
     this.speedCounter = (this.speedCounter + 1)%this.speed;
