@@ -3,7 +3,7 @@ import { Field } from "./field";
 export class Snake {
     speedCounter: number = 1;
     fields: Field[];
-    direction: Direction = Direction.Up;
+    direction: Direction;
     oldDirection: Direction;
     get length(): number {
         return this.fields.length;
@@ -11,8 +11,10 @@ export class Snake {
     get head(): Field {
         return this.fields[0];
     }
-    constructor(fieldDimensionX: number,fieldDimensionY: number, public speed: number, public squareSize: number) {
-        this.fields = [new Field(300,300), new Field(300+this.squareSize,300),new Field(300+this.squareSize*2,300)];
+    constructor(private fieldDimensions: number, public speed: number, public squareSize: number) {
+        this.fields = [ new Field(Math.floor(fieldDimensions/2),Math.floor(fieldDimensions/2)),
+                        new Field(Math.floor(fieldDimensions/2)+this.squareSize,Math.floor(fieldDimensions/2)),
+                        new Field(Math.floor(fieldDimensions/2)+this.squareSize*2,Math.floor(fieldDimensions/2))];
     }
 
     drawSnake(ctx:CanvasRenderingContext2D) {
@@ -21,8 +23,28 @@ export class Snake {
         }
     }
 
+    isCollidingWithTerrain() {
+        return (((this.head.x+this.squareSize) > this.fieldDimensions) || ((this.head.y+this.squareSize) > this.fieldDimensions) || (this.head.x < 0) || (this.head.y < 0));
+    }
+    die() {
+        for(let i = this.length; i>-1;i--)
+        {
+            this.fields.pop();
+        }
+        this.fields.push(new Field(Math.floor(this.fieldDimensions/2),Math.floor(this.fieldDimensions/2)));
+        this.fields.push(new Field(Math.floor(this.fieldDimensions/2)+this.squareSize,Math.floor(this.fieldDimensions/2)));
+        this.fields.push(new Field(Math.floor(this.fieldDimensions/2)+this.squareSize*2,Math.floor(this.fieldDimensions/2)));
+        this.direction = null;
+    }
+
     eat() {
         this.fields.push(new Field(this.fields[this.length-1].x,this.fields[this.length-1].y));
+    }
+    isTouching(food) {
+        return (((this.head.x >= food.x) && (this.head.x <= (food.x+this.squareSize))) ||
+          (((this.head.x+this.squareSize) >= food.x) && ((this.head.x+this.squareSize)<=(food.x+this.squareSize)))) &&
+          (((this.head.y >= food.y) && (this.head.y <= (food.y+this.squareSize))) || 
+          (((this.head.y+this.squareSize) >= food.y) && ((this.head.y+this.squareSize) <= (food.y+this.squareSize))));
     }
 
     setNewPosition() {

@@ -10,11 +10,13 @@ import { FoodGenerator } from "../../domain/foodGenerator";
 export class GameFieldComponent implements AfterViewInit {
   context:CanvasRenderingContext2D;
   squareSize: number = 10;
-  fieldHeight: number = 600;
-  fieldWidth: number = 600;
+  fieldDimensions: number = 200;
+  get score() {
+    return this.snake.length*11-this.snake.speed*this.snake.length;
+  }
   bgColor: string = "lightgray";
-  snake: Snake = new Snake(15,15,4,this.squareSize);
-  foodGenerator: FoodGenerator = new FoodGenerator(this.squareSize);
+  snake: Snake = new Snake(this.fieldDimensions,2,this.squareSize);
+  foodGenerator: FoodGenerator = new FoodGenerator(this.squareSize,this.fieldDimensions);
   @ViewChild("field") field;
   @HostListener('window:keydown', ['$event']) onkeypress(event: any) {
     if(event.code === 'ArrowUp' && (this.snake.direction !== Direction.Down)) this.snake.direction = Direction.Up;
@@ -43,17 +45,22 @@ export class GameFieldComponent implements AfterViewInit {
     });
 
     var ctx = this.context;
-    ctx.clearRect(0, 0, 600, 600);
+    ctx.clearRect(0, 0, this.fieldDimensions, this.fieldDimensions);
     this.foodGenerator.drawFood(ctx);
     this.snake.drawSnake(ctx);
     //Check for snakes head touching food
-    if ((((this.snake.head.x >= this.foodGenerator.food.x) && (this.snake.head.x <= (this.foodGenerator.food.x+this.squareSize))) ||
-          (((this.snake.head.x+this.squareSize) >= this.foodGenerator.food.x) && ((this.snake.head.x+this.squareSize)<=(this.foodGenerator.food.x+this.squareSize)))) &&
-          (((this.snake.head.y >= this.foodGenerator.food.y) && (this.snake.head.y <= (this.foodGenerator.food.y+this.squareSize))) || 
-          (((this.snake.head.y+this.squareSize) >= this.foodGenerator.food.y) && ((this.snake.head.y+this.squareSize) <= (this.foodGenerator.food.y+this.squareSize))))) {
+    if (this.snake.isTouching(this.foodGenerator.food)) {
             this.snake.eat();
             this.foodGenerator.generateFood();
           }
+    if(this.snake.isCollidingWithTerrain()) {
+            this.snake.die();
+          }
+
     this.snake.setNewPosition();
+  }
+
+  setGameSpeed(event: any) {
+    this.snake.speed = event.target.value;
   }
 }

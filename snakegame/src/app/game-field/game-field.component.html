@@ -1,1 +1,4 @@
-<canvas #field [height]="fieldHeight" [width]="fieldWidth" [style.background]="bgColor"></canvas>
+<canvas #field [height]="fieldDimensions" [width]="fieldDimensions" [style.background]="bgColor"></canvas>
+<h3>Score</h3>
+<input type="text" readonly [value]="score">
+<input type="number" max="10" min="1" (change)="setGameSpeed($event)">
