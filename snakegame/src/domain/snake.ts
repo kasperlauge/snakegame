@@ -5,6 +5,7 @@ export class Snake {
     fields: Field[];
     direction: Direction;
     oldDirection: Direction;
+    currentNickName: string = "";
     get length(): number {
         return this.fields.length;
     }
@@ -15,6 +16,7 @@ export class Snake {
         this.fields = [ new Field(Math.floor(fieldDimensions/2),Math.floor(fieldDimensions/2)),
                         new Field(Math.floor(fieldDimensions/2)+this.squareSize,Math.floor(fieldDimensions/2)),
                         new Field(Math.floor(fieldDimensions/2)+this.squareSize*2,Math.floor(fieldDimensions/2))];
+                        this.direction = null;
     }
 
     drawSnake(ctx:CanvasRenderingContext2D) {

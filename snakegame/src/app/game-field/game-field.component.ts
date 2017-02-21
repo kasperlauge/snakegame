@@ -9,8 +9,9 @@ import { FoodGenerator } from "../../domain/foodGenerator";
 })
 export class GameFieldComponent implements AfterViewInit {
   context:CanvasRenderingContext2D;
+  currentNickName: string = "";
   squareSize: number = 10;
-  fieldDimensions: number = 200;
+  fieldDimensions: number = 600;
   get score() {
     return this.snake.length*11-this.snake.speed*this.snake.length;
   }
@@ -54,6 +55,7 @@ export class GameFieldComponent implements AfterViewInit {
             this.foodGenerator.generateFood();
           }
     if(this.snake.isCollidingWithTerrain()) {
+            this.saveHighScore();
             this.snake.die();
           }
 
@@ -62,5 +64,13 @@ export class GameFieldComponent implements AfterViewInit {
 
   setGameSpeed(event: any) {
     this.snake.speed = event.target.value;
+  }
+
+  setNickName(event: any) {
+    this.currentNickName = event.target.value;
+  }
+  //should be made with a service instead
+  saveHighScore() {
+    localStorage.setItem(this.currentNickName,this.score.toString());
   }
 }
