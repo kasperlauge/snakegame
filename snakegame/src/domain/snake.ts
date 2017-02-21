@@ -20,6 +20,10 @@ export class Snake {
         }
     }
 
+    eat() {
+        this.fields.push(new Field(this.fields[this.length-1].x,this.fields[this.length-1].y));
+    }
+
     setNewPosition() {
         if(this.speedCounter === 1) {
         if(this.direction === Direction.Up) {
@@ -28,7 +32,6 @@ export class Snake {
                 this.fields[i].x = this.fields[i-1].x;
             }
             this.head.y = this.head.y-this.squareSize;
-            console.log(this.fields);
         }
         else if(this.direction === Direction.Down) {
             for (let i = this.length-1; i>0;i--) {

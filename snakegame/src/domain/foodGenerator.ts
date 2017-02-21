@@ -11,8 +11,8 @@ export class FoodGenerator {
     }
 
     generateFood() {
-        let x = Math.floor((Math.random() * 600-this.squareSize) + 0);
-        let y = Math.floor((Math.random() * 600-this.squareSize) + 0);
+        let x = Math.floor((Math.random() * 600-this.squareSize) + this.squareSize);
+        let y = Math.floor((Math.random() * 600-this.squareSize) + this.squareSize);
 
         this.food = new Field(x,y);
     }

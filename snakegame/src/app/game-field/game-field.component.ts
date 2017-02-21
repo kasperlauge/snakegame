@@ -13,7 +13,7 @@ export class GameFieldComponent implements AfterViewInit {
   fieldHeight: number = 600;
   fieldWidth: number = 600;
   bgColor: string = "lightgray";
-  snake: Snake = new Snake(15,15,4,this.squareSize);
+  snake: Snake = new Snake(15,15,2,this.squareSize);
   foodGenerator: FoodGenerator = new FoodGenerator(this.squareSize);
   @ViewChild("field") field;
   @HostListener('window:keydown', ['$event']) onkeypress(event: any) {
@@ -46,6 +46,13 @@ export class GameFieldComponent implements AfterViewInit {
     ctx.clearRect(0, 0, 600, 600);
     this.foodGenerator.drawFood(ctx);
     this.snake.drawSnake(ctx);
+    if ((((this.snake.head.x >= this.foodGenerator.food.x) && (this.snake.head.x <= (this.foodGenerator.food.x+this.squareSize))) ||
+          (((this.snake.head.x+this.squareSize) >= this.foodGenerator.food.x) && ((this.snake.head.x+this.squareSize)<=(this.foodGenerator.food.x+this.squareSize)))) &&
+          (((this.snake.head.y >= this.foodGenerator.food.y) && (this.snake.head.y <= (this.foodGenerator.food.y+this.squareSize))) || 
+          (((this.snake.head.y+this.squareSize) >= this.foodGenerator.food.y) && ((this.snake.head.y+this.squareSize) <= (this.foodGenerator.food.y+this.squareSize))))) {
+            this.snake.eat();
+            this.foodGenerator.generateFood();
+          }
     this.snake.setNewPosition();
   }
 }
