@@ -5,7 +5,6 @@ export class Snake {
     fields: Field[];
     direction: Direction;
     oldDirection: Direction;
-    currentNickName: string = "";
     get length(): number {
         return this.fields.length;
     }
@@ -37,6 +36,7 @@ export class Snake {
         this.fields.push(new Field(Math.floor(this.fieldDimensions/2)+this.squareSize,Math.floor(this.fieldDimensions/2)));
         this.fields.push(new Field(Math.floor(this.fieldDimensions/2)+this.squareSize*2,Math.floor(this.fieldDimensions/2)));
         this.direction = null;
+
     }
 
     eat() {
