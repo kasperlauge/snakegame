@@ -4,6 +4,7 @@ export class Snake {
     speedCounter: number = 1;
     fields: Field[];
     direction: Direction = Direction.Up;
+    oldDirection: Direction;
     get length(): number {
         return this.fields.length;
     }
