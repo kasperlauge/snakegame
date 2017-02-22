@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewChild, AfterViewInit, HostListener } from '@angular/core';
 import { Snake, Direction } from "../../domain/snake";
 import { FoodGenerator } from "../../domain/foodGenerator";
+import { StartGame } from "../../domain/startGame";
 
 @Component({
   selector: 'app-game-field',
@@ -10,8 +11,10 @@ import { FoodGenerator } from "../../domain/foodGenerator";
 export class GameFieldComponent implements AfterViewInit {
   context:CanvasRenderingContext2D;
   currentNickName: string = "";
+  gameStarted: boolean = false;
   squareSize: number = 10;
-  fieldDimensions: number = 600;
+  fieldDimensions: number = 400;
+  startGameClass: StartGame = new StartGame(this.fieldDimensions);
   get score() {
     return this.snake.length*11-this.snake.speed*this.snake.length;
   }
@@ -20,6 +23,7 @@ export class GameFieldComponent implements AfterViewInit {
   foodGenerator: FoodGenerator = new FoodGenerator(this.squareSize,this.fieldDimensions);
   @ViewChild("field") field;
   @HostListener('window:keydown', ['$event']) onkeypress(event: any) {
+    this.gameStarted = true;
     if(event.code === 'ArrowUp' && (this.snake.direction !== Direction.Down)) this.snake.direction = Direction.Up;
     if(event.code === 'ArrowDown'&& (this.snake.direction !== Direction.Up)) this.snake.direction = Direction.Down;
     if(event.code === 'ArrowRight'&& (this.snake.direction !== Direction.Left)) this.snake.direction = Direction.Right;
@@ -31,7 +35,6 @@ export class GameFieldComponent implements AfterViewInit {
 
   ngAfterViewInit() {
     this.context = this.field.nativeElement.getContext("2d");
-
     this.startGame();
   }
 
@@ -49,14 +52,16 @@ export class GameFieldComponent implements AfterViewInit {
     ctx.clearRect(0, 0, this.fieldDimensions, this.fieldDimensions);
     this.foodGenerator.drawFood(ctx);
     this.snake.drawSnake(ctx);
+    if(!this.gameStarted) this.startGameClass.drawStartGame(ctx);
     //Check for snakes head touching food
     if (this.snake.isTouching(this.foodGenerator.food)) {
             this.snake.eat();
             this.foodGenerator.generateFood();
           }
-    if(this.snake.isCollidingWithTerrain()) {
+    if(this.snake.isCollidingWithTerrain() || this.snake.isCollidingWithSelf()) {
             this.saveHighScore();
             this.snake.die();
+            this.gameStarted = false;
           }
 
     this.snake.setNewPosition();
