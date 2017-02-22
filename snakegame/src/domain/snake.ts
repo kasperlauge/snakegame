@@ -2,6 +2,7 @@ import { Field } from "./field";
 
 export class Snake {
     speedCounter: number = 1;
+    henningTicks: number = 0;
     fields: Field[];
     direction: Direction;
     oldDirection: Direction; //To prevent bug where u can turn 180 degrees as snake
@@ -20,11 +21,12 @@ export class Snake {
 
     drawSnake(ctx:CanvasRenderingContext2D) {
         var imageObj = new Image(this.squareSize,this.squareSize);
-        imageObj.src = '/assets/img/henning.png';
+        imageObj.src = this.chooseCorrectHenningPicture(this.henningTicks);
         ctx.drawImage(imageObj, this.fields[0].x, this.fields[0].y);
         for (let i = 1; i<this.length;i++){
         ctx.fillRect(this.fields[i].x, this.fields[i].y, this.squareSize, this.squareSize);
-        }
+    }
+    this.henningTicks = (this.henningTicks + 1) % 19;
     }
 
     isCollidingWithTerrain() {
@@ -136,6 +138,30 @@ export class Snake {
             this.head.x = this.head.x-this.squareSize;
             this.oldDirection = Direction.Left;
         }
+    }
+
+    chooseCorrectHenningPicture(henningTick: number) : string {
+        if(henningTick === 0) return '/assets/img/henning1.png';
+        if(henningTick === 1) return '/assets/img/henning1.png';
+        if(henningTick === 2) return '/assets/img/henning1.png';
+        if(henningTick === 3) return '/assets/img/henning2.png';
+        if(henningTick === 4) return '/assets/img/henning2.png';
+        if(henningTick === 5) return '/assets/img/henning2.png';
+        if(henningTick === 6) return '/assets/img/henning3.png';
+        if(henningTick === 7) return '/assets/img/henning3.png';
+        if(henningTick === 8) return '/assets/img/henning3.png';
+        if(henningTick === 9) return '/assets/img/henning4.png';
+        if(henningTick === 10) return '/assets/img/henning4.png';
+        if(henningTick === 11) return '/assets/img/henning4.png';
+        if(henningTick === 12) return '/assets/img/henning3.png';
+        if(henningTick === 13) return '/assets/img/henning3.png';
+        if(henningTick === 14) return '/assets/img/henning3.png';
+        if(henningTick === 15) return '/assets/img/henning2.png';
+        if(henningTick === 16) return '/assets/img/henning2.png';
+        if(henningTick === 17) return '/assets/img/henning2.png';
+        if(henningTick === 18) return '/assets/img/henning1.png';
+        if(henningTick === 19) return '/assets/img/henning1.png';
+        if(henningTick === 20) return '/assets/img/henning1.png';
     }
 
 }
