@@ -2,6 +2,8 @@ import { Component, OnInit, ViewChild, AfterViewInit, HostListener } from '@angu
 import { Snake, Direction } from "../../domain/snake";
 import { FoodGenerator } from "../../domain/foodGenerator";
 import { StartGame } from "../../domain/startGame";
+import { HighScore } from "../../domain/highScore";
+import { SaveHighScoreService } from "../save-high-score.service";
 
 @Component({
   selector: 'app-game-field',
@@ -12,8 +14,8 @@ export class GameFieldComponent implements AfterViewInit {
   context:CanvasRenderingContext2D;
   currentNickName: string = "";
   gameStarted: boolean = false;
-  squareSize: number = 10;
-  fieldDimensions: number = 400;
+  squareSize: number = 20;
+  fieldDimensions: number = 600;
   startGameClass: StartGame = new StartGame(this.fieldDimensions);
   get score() {
     return this.snake.length*11-this.snake.speed*this.snake.length;
@@ -30,7 +32,7 @@ export class GameFieldComponent implements AfterViewInit {
     if(event.code === 'ArrowLeft'&& (this.snake.direction !== Direction.Right)) this.snake.direction = Direction.Left;
   }
  
-  constructor() { }
+  constructor(private saveHighScoreService: SaveHighScoreService) { }
  
 
   ngAfterViewInit() {
@@ -76,6 +78,10 @@ export class GameFieldComponent implements AfterViewInit {
   }
   //should be made with a service instead
   saveHighScore() {
-    localStorage.setItem(this.currentNickName,this.score.toString());
+    this.saveHighScoreService.saveSingleHighScoreToDb(new HighScore(this.currentNickName,this.score));
+  }
+  //should be made with a service instead
+  get highScore() {
+    return this.saveHighScoreService.getHighScoreFromDb();
   }
 }

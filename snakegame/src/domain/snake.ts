@@ -19,7 +19,10 @@ export class Snake {
     }
 
     drawSnake(ctx:CanvasRenderingContext2D) {
-        for (let i = 0; i<this.length;i++){
+        var imageObj = new Image(this.squareSize,this.squareSize);
+        imageObj.src = '/assets/img/henning.png';
+        ctx.drawImage(imageObj, this.fields[0].x, this.fields[0].y);
+        for (let i = 1; i<this.length;i++){
         ctx.fillRect(this.fields[i].x, this.fields[i].y, this.squareSize, this.squareSize);
         }
     }
