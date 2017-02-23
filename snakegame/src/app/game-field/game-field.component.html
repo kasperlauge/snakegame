@@ -1,12 +1,18 @@
-<div style="display: inline-block;">
+<div>
     <canvas #field [height]="fieldDimensions" [width]="fieldDimensions" [style.background]="bgColor" style="border: 1px solid black; float: left; margin: 10px;"></canvas>
-    
+    <input id="nickName" *ngIf="snake.direction === null" type="text" placeholder="Navn" (change)="setNickName($event)">
 
-    <app-high-score style="float: left; margin: 10px;" [highScores]="highScore"></app-high-score>
+    <div *ngIf="snake.direction === null">
+    <label id="hard">Svær</label>
 
-        <md-list style="float: left;">
-            <md-list-item><h3>Score: {{score}}</h3></md-list-item>  
-            <md-list-item><input *ngIf="snake.direction === null" type="range" max="10" min="1" [(ngModel)]="snake.speed">{{snake.speed}}</md-list-item>
-            <md-list-item><input *ngIf="snake.direction === null" type="text" placeholder="Navn" (change)="setNickName($event)"></md-list-item>
-        </md-list>
+    <div id="speed" style="width: 100px;">
+    <input type="range" id="reversedRange" max="10" min="1" [(ngModel)]="snake.speed">
+    <p style="text-align: center">{{snake.speed}}</p>
     </div>
+
+    <label id="easy">Let</label>
+    </div>
+
+    <h3 id="currentScore">Score: {{score}}</h3>
+    <app-high-score style="float: left; margin: 10px;" [highScores]="highScores"></app-high-score>
+</div>

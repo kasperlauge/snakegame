@@ -1,4 +1,5 @@
 import { Component, OnInit, ViewChild, AfterViewInit, HostListener } from '@angular/core';
+import { AngularFire, FirebaseListObservable } from 'angularfire2';
 import { Snake, Direction } from "../../domain/snake";
 import { FoodGenerator } from "../../domain/foodGenerator";
 import { StartGame } from "../../domain/startGame";
@@ -16,6 +17,9 @@ export class GameFieldComponent implements AfterViewInit {
   gameStarted: boolean = false;
   squareSize: number = 20;
   fieldDimensions: number = 600;
+
+  highScores: FirebaseListObservable<HighScore[]>;
+
   startGameClass: StartGame = new StartGame(this.fieldDimensions);
   get score() {
     return this.snake.length*11-this.snake.speed*this.snake.length;
@@ -25,14 +29,18 @@ export class GameFieldComponent implements AfterViewInit {
   foodGenerator: FoodGenerator = new FoodGenerator(this.squareSize,this.fieldDimensions);
   @ViewChild("field") field;
   @HostListener('window:keydown', ['$event']) onkeypress(event: any) {
+    if(this.currentNickName !== "") {
     this.gameStarted = true;
     if(event.code === 'ArrowUp' && (this.snake.direction !== Direction.Down)) this.snake.direction = Direction.Up;
     if(event.code === 'ArrowDown'&& (this.snake.direction !== Direction.Up)) this.snake.direction = Direction.Down;
     if(event.code === 'ArrowRight'&& (this.snake.direction !== Direction.Left)) this.snake.direction = Direction.Right;
     if(event.code === 'ArrowLeft'&& (this.snake.direction !== Direction.Right)) this.snake.direction = Direction.Left;
+    }
   }
  
-  constructor(private saveHighScoreService: SaveHighScoreService) { }
+  constructor(private saveHighScoreService: SaveHighScoreService, af: AngularFire) {
+    this.highScores = af.database.list('/0');
+   }
  
 
   ngAfterViewInit() {
@@ -66,6 +74,7 @@ export class GameFieldComponent implements AfterViewInit {
             this.saveHighScore();
             this.snake.die();
             this.gameStarted = false;
+            this.currentNickName = "";
           }
 
     this.snake.setNewPosition();
@@ -77,8 +86,5 @@ export class GameFieldComponent implements AfterViewInit {
   }
   saveHighScore() {
     this.saveHighScoreService.saveSingleHighScoreToDb(new HighScore(this.currentNickName,this.score));
-  }
-  get highScore() {
-    return this.saveHighScoreService.getHighScoreFromDb();
   }
 }

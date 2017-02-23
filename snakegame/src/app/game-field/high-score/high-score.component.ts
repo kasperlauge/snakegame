@@ -1,4 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
+import { FirebaseListObservable } from 'angularfire2';
 
 import { HighScore } from "../../../domain/highScore";
 
@@ -9,7 +10,7 @@ import { HighScore } from "../../../domain/highScore";
 })
 export class HighScoreComponent implements OnInit {
 
-  @Input() highScores: HighScore[];
+  @Input() highScores: FirebaseListObservable<HighScore[]>;
   constructor() { }
 
   ngOnInit() {
