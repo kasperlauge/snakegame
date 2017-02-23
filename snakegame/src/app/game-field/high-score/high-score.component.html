@@ -1,4 +1,11 @@
-<h2>High scores</h2>
-<ol>
-  <li *ngFor="let item of highScores">{{item.name + " - " + item.score}}</li>
-</ol>
+
+<md-card>
+  <md-card-header>
+<md-card-title><h1>High scores</h1></md-card-title>
+  </md-card-header>
+<md-card-content>
+  <ol>
+    <li *ngFor="let item of highScores"><h4>{{item.name + " - " + item.score}}</h4></li>
+  </ol>
+</md-card-content>
+</md-card>

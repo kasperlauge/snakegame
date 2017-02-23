@@ -54,7 +54,9 @@ export class GameFieldComponent implements AfterViewInit {
     ctx.clearRect(0, 0, this.fieldDimensions, this.fieldDimensions);
     this.foodGenerator.drawFood(ctx);
     this.snake.drawSnake(ctx);
-    if(!this.gameStarted) this.startGameClass.drawStartGame(ctx);
+    if(!this.gameStarted) {
+    this.startGameClass.drawStartGame(ctx);
+    }
     //Check for snakes head touching food
     if (this.snake.isTouching(this.foodGenerator.food)) {
             this.snake.eat();
@@ -69,18 +71,13 @@ export class GameFieldComponent implements AfterViewInit {
     this.snake.setNewPosition();
   }
 
-  setGameSpeed(event: any) {
-    this.snake.speed = event.target.value;
-  }
 
   setNickName(event: any) {
     this.currentNickName = event.target.value;
   }
-  //should be made with a service instead
   saveHighScore() {
     this.saveHighScoreService.saveSingleHighScoreToDb(new HighScore(this.currentNickName,this.score));
   }
-  //should be made with a service instead
   get highScore() {
     return this.saveHighScoreService.getHighScoreFromDb();
   }

@@ -1,6 +1,12 @@
-<canvas #field [height]="fieldDimensions" [width]="fieldDimensions" [style.background]="bgColor"></canvas>
-<h3>Score</h3>
-<input type="text" readonly [value]="score">
-<input *ngIf="snake.direction === null" type="range" max="10" min="1" (change)="setGameSpeed($event)" value="4">
-<input *ngIf="snake.direction === null" type="text" placeholder="Navn" (change)="setNickName($event)">
-<app-high-score [highScores]="highScore"></app-high-score>
+<div style="display: inline-block;">
+    <canvas #field [height]="fieldDimensions" [width]="fieldDimensions" [style.background]="bgColor" style="border: 1px solid black; float: left; margin: 10px;"></canvas>
+    
+
+    <app-high-score style="float: left; margin: 10px;" [highScores]="highScore"></app-high-score>
+
+        <md-list style="float: left;">
+            <md-list-item><h3>Score: {{score}}</h3></md-list-item>  
+            <md-list-item><input *ngIf="snake.direction === null" type="range" max="10" min="1" [(ngModel)]="snake.speed">{{snake.speed}}</md-list-item>
+            <md-list-item><input *ngIf="snake.direction === null" type="text" placeholder="Navn" (change)="setNickName($event)"></md-list-item>
+        </md-list>
+    </div>
