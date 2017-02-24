@@ -1,8 +1,8 @@
 <div>
     <canvas #field [height]="fieldDimensions" [width]="fieldDimensions" [style.background]="bgColor" style="border: 1px solid black; float: left; margin: 10px;"></canvas>
-    <input id="nickName" *ngIf="snake.direction === null" type="text" placeholder="Navn" (change)="setNickName($event)">
+    <input id="nickName" *ngIf="gameStarted === false" autofocus="autofocus" type="text" placeholder="Navn" (change)="setNickName($event)">
 
-    <div *ngIf="snake.direction === null">
+    <div *ngIf="gameStarted === false">
     <label id="hard">Svær</label>
 
     <div id="speed" style="width: 100px;">

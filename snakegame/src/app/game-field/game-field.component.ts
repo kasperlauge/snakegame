@@ -51,9 +51,7 @@ export class GameFieldComponent implements AfterViewInit {
   ngOnInit() {
     this.saveHighScoreService.getHighScore()
     .subscribe(hs => {
-      console.log(hs);
       this.highScores = hs;
-      console.log(this.highScores);
     });
   }
 
