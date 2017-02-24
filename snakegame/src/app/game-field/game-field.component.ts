@@ -18,7 +18,7 @@ export class GameFieldComponent implements AfterViewInit {
   squareSize: number = 20;
   fieldDimensions: number = 600;
 
-  highScores: FirebaseListObservable<HighScore[]>;
+  highScores: HighScore[];
 
   startGameClass: StartGame = new StartGame(this.fieldDimensions);
   get score() {
@@ -38,14 +38,23 @@ export class GameFieldComponent implements AfterViewInit {
     }
   }
  
-  constructor(private saveHighScoreService: SaveHighScoreService, af: AngularFire) {
-    this.highScores = af.database.list('/0');
+  constructor(private saveHighScoreService: SaveHighScoreService) {
+
    }
  
 
   ngAfterViewInit() {
     this.context = this.field.nativeElement.getContext("2d");
     this.startGame();
+  }
+
+  ngOnInit() {
+    this.saveHighScoreService.getHighScore()
+    .subscribe(hs => {
+      console.log(hs);
+      this.highScores = hs;
+      console.log(this.highScores);
+    });
   }
 
   startGame() {

@@ -20,4 +20,14 @@ export class SaveHighScoreService {
   saveSingleHighScoreToDb(highscore: HighScore) {
     this.highScores.push(highscore);
   }
+
+  getHighScore() {
+    return this.highScores.map(highScores => {
+      let hsarray = highScores.map(hs => {
+        return new HighScore(hs.name,hs.score);
+      });
+      let temp: HighScore[] = this.sortService.sortDescending(hsarray);
+      return temp.slice(0,15);
+    });
+  }
 }
